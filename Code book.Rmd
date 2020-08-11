@@ -1,0 +1,178 @@
+---
+title: "Human Activity Recognition Using Smartphones Tidy Data Assignment Codebook"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Codebook
+
+This codebook describes the changes to Human Activity Recognition Using Smartphones Dataset Version 1.0 as performed by the ```run_analysis.R``` script.
+
+**Initial Dataset**
+
+Human Activity Recognition USing Smartphones Dataset
+Version 1.0
+www.smartlab.ws
+
+**Data in Brief**
+
+Experiments carried out by 30 volunteers, performing six activities (WALKING, WALKING_UPSTAIRS, WALKING_DOWNSTAIRS, SITTING, STANDING, LAYING) wearing a smartphone on their waist. 3-axial linear acceleration and 3-axial angular velocity cauptured using smartphones' accelerometer and gyroscope.
+
+# Data Manipulations
+
+The following were performed on the data
+
+**1. Data downloaded**  
+
+Data was downloaded to a folder titled "UCI HAR Dataset"
+
+```run_analysis.R``` performs the following operations:
+
+**2. Data read into R**
+
+The original text files were read into the following objects: 
+
+- ```features``` <- ```features.txt```: 561 observations of 2 variables  
+  + ```n```: a number corresponding with the feature in other datasets; 
+  + ```function``` measures corresponding with 3-axial measurements from phone accelerometer or gyroscope)  
+
+
+- ```activities``` <- ```activity_labels.txt```: 6 observations of 2 variables:  
+  + ```label```: a number corresponding with the activity in other datasets  
+  + ```activity``` describing six activities: WALKING, WALKING_UPSTAIRS, WALKING_DOWNSTAIRS, SITTING, STANDING, LAYING  
+
+
+- ```testSubject``` <- ```subject_test.txt```: 2957 observations of 1 variable:  
+  + ```subject``` numbers corresponding with a subject ID showing which subject in the testing group the test data corresponds with  
+
+- ```trainSubject``` <- ```subject_train.text```: 7352 observations of 1 variable:  
+  + ```subject``` numbers corresponding with a subject ID showing which subject in the training group the training data corresponds with  
+
+
+- ```testX``` <- ```X_test.txt```: 2947 observations of 561 variables:  
+  + each variable was assigned a variable name from ```features$function``` corresponding with the the appropriate measure  
+
+- ```testY``` <- ```Y_test.txt```: 2947 observations of 1 variable:  
+  +```label``` a number corresponding with ```activities$label``` and, therefore, showing the activity from which each observation in the test dataset was drawn  
+
+
+- ```trainX``` <- ```X_train.txt```: 7352 observations of 561 variables:  
+  + each variable was assigned a variable name from ```features$function``` corresponding with the the appropriate measure  
+
+
+- ```trainY``` <- ```Y_train.txt```: 7352 observations of 1 variable:  
+  +```label``` a number corresponding with ```activities$label``` and, therefore, showing the activity from which each observation in the test dataset was drawn  
+
+**3. Merges the test data set and training data set to create one data set**
+
+```x``` created by ```rbind()``` ```testX``` and ```trainX```. It has 10299 observations of 561 variables. 
+```y``` created by ```rbind()``` ```testY``` and ```trainY```. It has 102999 observations of 1 variable.
+```subject``` is created by ```rbind()``` ```testSubject``` and ```trainSubject```. It has 10299 observations of 1 variable.
+```mergedDF``` is created by ```cbind()``` ```subject````, ```y````, ```x```. It has 10299 observations of 563 variables.
+
+**4. Extracts only the measurements on the mean and standard deviation for each measurement**
+
+```extractedDF``` is created by ```select()``` the ```subject``` and ```label``` variables and the variables that ```contains()``` the literal phrases ```"mean."``` and ```"std"``` and does not contain ```"angle"```. It has 10299 observations of 68 variables. The 68 variables are the only variables with measurements on the mean or standard deviation. Some variables that with "mean" or "std" in their name were excluded (see below).
+
+*Notes on exclusion*: 
+
+- Measures including the literal phrase ```"meanFreq"``` were excluded using ```contains("mean.")``` because they refer the "Weighted average of the frequency components to obtain a mean frequency" rather than referring to "measurements on the mean" (See ```features_info.txt```)  
+
+- Measures including the literal phrase ```"angle"``` were excluded using ```-contains("angle")``` because they refer to the "angle between" two mean or standard deviation vectors rather than referring to "measurements on the mean" (See ```features_info.txt```)  
+
+**5. Uses descriptive activity names to name the activities in the data set**
+
+```label``` observations were renamed by swapping the numbers with their corresponding activity names (e.g 1 = WALKING, 2 = WALKING_UPSTAIRS, 3 = WALKING_DOWNSTAIRS, 4 = SITTING, 5 = STANDING, 6 = LAYING).
+
+**6. Appropriately labels the data set with descriptive variable names**
+
+```names()``` was used to assign a vector of descriptive names to ```extractedDF```. Names were created based on a close reading of ```features_info.txt```
+
+*Variables*  
+ [1] "subject"                                                               
+ [2] "activity"                                                              
+ [3] "MeanTimeDomainSignalForBodyAccelerationOnAxisX"                        
+ [4] "MeanTimeDomainSignalForBodyAccelerationOnAxisY"                        
+ [5] "MeanTimeDomainSignalForBodyAccelerationOnAxisZ"                        
+ [6] "MeanTimeDomainSignalForGravityAccelerationOnAxisX"                     
+ [7] "MeanTimeDomainSignalForGravityAccelerationOnAxisY"                     
+ [8] "MeanTimeDomainSignalForGravityAccelerationOnAxisZ"                     
+ [9] "MeanTimeDomainSignalForBodyAccelerationJerkOnAxisX"                    
+[10] "MeanTimeDomainSignalForBodyAccelerationJerkOnAxisY"                    
+[11] "MeanTimeDomainSignalForBodyAccelerationJerkOnAxisZ"                    
+[12] "MeanTimeDomainSignalForBodyGyroscopeOnAxisX"                           
+[13] "MeanTimeDomainSignalForBodyGyroscopeOnAxisY"                           
+[14] "MeanTimeDomainSignalForBodyGyroscopeOnAxisZ"                           
+[15] "MeanTimeDomainSignalForBodyGyroscopeJerkOnAxisX"                       
+[16] "MeanTimeDomainSignalForBodyGyroscopeJerkOnAxisY"                       
+[17] "MeanTimeDomainSignalForBodyGyroscopeJerkOnAxisZ"                       
+[18] "MeanTimeDomainSignalForBodyAccelerationMagnitude"                      
+[19] "MeanTimeDomainSignalForGravityAccelerationMagnitude"                   
+[20] "MeanTimeDomainSignalForBodyAcceralationJerkMagnitude"                  
+[21] "MeanTimeDomainSignalForBodyGyroscopeMagnitude"                         
+[22] "MeanTimeDomainSignalForBodyGyroscopeJerkMagnitude"                     
+[23] "MeanFrequencyDomainSignalForBodyAccelerationOnAxisX"                   
+[24] "MeanFrequencyDomainSignalForBodyAccelerationOnAxisY"                   
+[25] "MeanFrequencyDomainSignalForBodyAccelerationOnAxisZ"                   
+[26] "MeanFrequencyDomainSignalForBodyAccelerationJerkOnAxisX"               
+[27] "MeanFrequencyDomainSignalForBodyAccelerationJerkOnAxisY"               
+[28] "MeanFrequencyDomainSignalForBodyAccelerationJerkOnAxisZ"               
+[29] "MeanFrequencyDomainSignalForBodyGyroscopeOnAxisX"                      
+[30] "MeanFrequencyDomainSignalForBodyGyroscopeOnAxisY"                      
+[31] "MeanFrequencyDomainSignalForBodyGyroscopeOnAxisZ"                      
+[32] "MeanFrequencyDomainSignalForBodyAccelerationMagnititude"               
+[33] "MeanFrequencyDomainSignalForBodyAccelarationJerkMagnitude"             
+[34] "MeanFrequencyDomainSignalForBodyGyroscopeMagnitude"                    
+[35] "MeanFrequencyDomainSignalForBodyGyroscopeJerkMagnitude"                
+[36] "StandardDeviationTimeDomainSignalForBodyAccelerationOnAxisX"           
+[37] "StandardDeviationTimeDomainSignalForBodyAccelerationOnAxisY"           
+[38] "StandardDeviationTimeDomainSignalForBodyAccelerationOnAxisZ"           
+[39] "StandardDeviationTimeDomainSignalForGravityAccelerationOnAxisX"        
+[40] "StandardDeviationTimeDomainSignalForGravityAccelerationOnAxisY"        
+[41] "StandardDeviationTimeDomainSignalForGravityAccelerationOnAxisZ"        
+[42] "StandardDeviationTimeDomainSignalForBodyAccelerationJerkOnAxisX"       
+[43] "StandardDeviationTimeDomainSignalForBodyAccelerationJerkOnAxisY"       
+[44] "StandardDeviationTimeDomainSignalForBodyAccelerationJerkOnAxisZ"       
+[45] "StandardDeviationTimeDomainSignalForBodyGyroscopeOnAxisX"              
+[46] "StandardDeviationTimeDomainSignalForBodyGyroscopeOnAxisY"              
+[47] "StandardDeviationTimeDomainSignalForBodyGyroscopeOnAxisZ"              
+[48] "StandardDeviationTimeDomainSignalForBodyGyroscopeJerkOnAxisX"          
+[49] "StandardDeviationTimeDomainSignalForBodyGyroscopeJerkOnAxisY"          
+[50] "StandardDeviationTimeDomainSignalForBodyGyroscopeJerkOnAxisZ"          
+[51] "StandardDeviationTimeDomainSignalForBodyAccelerationMagnitude"         
+[52] "StandardDeviationTimeDomainSignalForGravityAccelerationMagnitude"      
+[53] "StandardDeviationTimeDomainSignalForBodyAccelerationJerkMagnitude"     
+[54] "StandardDeviationTimeDomainSignalForBodyGyroscopMagnitude"             
+[55] "StandardDeviationTimeDomainSignalForBodyGyroscopeJerkMagnitude"        
+[56] "StandardDeviationFrequencyDomainSignalForBodyAccelerationOnAxisX"      
+[57] "StandardDeviationFrequencyDomainSignalForBodyAccelerationOnAxisY"      
+[58] "StandardDeviationFrequencyDomainSignalForBodyAccelerationOnAxisZ"      
+[59] "StandardDeviationFrequencyDomainSignalForBodyAccelerationJerkOnAxisX"  
+[60] "StandardDeviationFrequencyDomainSignalForBodyAccelerationJerkOnAxisY"  
+[61] "StandardDeviationFrequencyDomainSignalForBodyAccelerationJerkOnAxisZ"  
+[62] "StandardDeviationFrequencyDomainSignalForBodyGyroscopeOnAxisX"         
+[63] "StandardDeviationFrequencyDomainSignalForBodyGyroscopeOnAxisY"         
+[64] "StandardDeviationFrequencyDomainSignalForBodyGyroscopeOnAxisZ"         
+[65] "StandardDeviationFrequencyDomainSignalForBodyAccelerationMagnitude"    
+[66] "StandardDeviationFrequencyDomainSignalForBodyAccelerationJerkMagnitude"  
+[67] "StandardDeviationFrequencyDomainSignalForBodyGyroscopeMagnitude"       
+[68] "StandardDeviationFrequencyDomainSignalForBodyGyroscopeJerkMagnitude"
+
+**7. Creates a second,independent tidy data set with the average of each variable, for each activity, and each subject**
+
+```tidyData``` was created from ```extractedDF``` by grouping the data by subject and activity and then calculating the the means of the groupings for each measure. It has 180 rows and 68 columns.
+
+*Following Wickham (2014), ```tidyData``` is tidy because:*
+
+- Each row corresponds with one observation (subject (n = 30) performing a given activity (n = 6): 6 x 3 =180) and represents all the measures for that observation.  
+
+- Each variable is a column (subject ID, activity, and 68 different measurements for each subject x activity combination).  
+
+- Each type of observational unit is its own table (it includes means)  
+
+- Although there are different ways to make the same dataset "tidy", ```tidyData``` is simple to use for its stated purpose: showing the average of each variable, for each activity, for each subject (see also Wickham, 2014)
+
+```tidyData``` was exported into ```tidyData.txt```

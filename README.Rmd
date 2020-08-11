@@ -1,0 +1,26 @@
+---
+title: "README"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+**Peer-Graded Assignment: Getting and Cleaning Data**
+
+This repository is a sumbission by Chris for the Getting and Cleaning Data assignment for Coursera. It includes R script, a codebook, and a tidy dataset based on analyzing the Human Activity Recognition USing Smartphones Dataset.
+
+**Files**
+
+- ```Code book.Rmd``` a codebook that describes variables and the analyses performed on the data.   
+
+- ```run_analysis.R``` an R-script that performs the following steps requested in the assignment instructions:   
+  + Merges the training and test sets to create one data set.  
+  + Extracts only the measurements on the mean and standard deviation for each measurement.  
+  + Uses descrptive activity names to name the activities in the data set.  
+  + Appropriately labels the data set with descriptive variable names.  
+  + From the data set in step 4, creates a second, independent tidy data set with the average of each variable for each activity and each subject.  
+
+- ```tidyData.txt``` a tidy dataset with the average of each variable for each activity and each subject. The exported dataset produced after running ```run_analysis.R``` and following the steps above.
+ 
